@@ -13,6 +13,7 @@ import Physics from './Physics/index';
 import PhysicsMousePick from './Physics/mousePick';
 import BenchmarkRotatingCubes from './Benchmark/RotatingCubes';
 import RotatingCubesDirectUpdates from './Benchmark/RotatingCubesDirectUpdates';
+import LightsHemisphereExample from './HemisphereLight/index';
 
 const examples = [
   {
@@ -62,6 +63,12 @@ const examples = [
     component: PhysicsMousePick,
     url: 'Physics/mousePick',
     slug: 'webgl_physics_mousepick',
+  },
+  {
+    name: 'Lights - Hemisphere',
+    component: LightsHemisphereExample,
+    url: 'Lights/hemisphere',
+    slug: 'webgl_lights_hemisphere',
   },
   {
     separator: true,
