@@ -19,7 +19,7 @@ class HemisphereLight extends React.Component {
     this.aspectRatio = window.innerWidth / window.innerHeight;
     this.cameraNear = 1.0;
     this.cameraFar = 5000.0;
-    this.cameraPosition = new THREE.Vector3(0, 0, 250);
+    this.cameraPosition = new THREE.Vector3(0, 0, 350);
 
     // fog/background
     this.clearColor = new THREE.Color().setHSL(0.6, 0.0, 1.0);
@@ -60,6 +60,8 @@ class HemisphereLight extends React.Component {
         <mesh
           ref={flamingoMesh => {
             flamingoMesh.updateMorphTargets();
+            flamingoMesh.castShadow = true;
+            flamingoMesh.receiveShadow = true;
             const mixer = new THREE.AnimationMixer(flamingoMesh);
             const clipAction  = mixer.clipAction(geometry.animations[0]);
             clipAction.setDuration(1);
@@ -132,6 +134,7 @@ class HemisphereLight extends React.Component {
         antialias
         gammaInput
         gammaOutput
+        shadowMapEnabled
         mainCamera="camera" // this points to the perspectiveCamera below
         width={width}
         height={height}
@@ -148,6 +151,15 @@ class HemisphereLight extends React.Component {
           vertexColors={THREE.FaceColors}
           shading={THREE.FlatShading}
         />
+        <meshPhongMaterial
+          resourceId="groundMaterial"
+          color={new THREE.Color().setHSL(0.095, 1.0, 0.75)}
+          specular={0x050505}
+        />
+        <planeBufferGeometry
+          resourceId="groundGeometry"
+          width={10000}
+          height={10000} />
       </resources>
       <scene
         ref={scene => this.scene = scene}
@@ -171,11 +183,37 @@ class HemisphereLight extends React.Component {
         <directionalLight
           color={this.directionalLightColor}
           position={this.directionalLightPosition}
-          rotation={new THREE.Euler(1, 0, 0)}
+          rotation={new THREE.Euler(Math.PI / 4.0, 0, 0)}
           ref={directionalLight => {
-            this.directionalLight = directionalLight
+            if (null !== directionalLight) {
+              this.directionalLight = directionalLight
+            }
           }}
+          castShadow
+
+          shadowBias={-0.0001}
+          shadowMapWidth={2048}
+          shadowMapHeight={2048}
+
+          shadowCameraFar={3500}
+          shadowCameraLeft={-50}
+          shadowCameraRight={50}
+          shadowCameraTop={50}
+          shadowCameraBottom={-50}
         />
+        <mesh
+          ref={m => {
+            if (null !== m) {
+              m.receiveShadow = true
+            }
+          }}
+          position={new THREE.Vector3(0, -33, 0)}
+          rotation={new THREE.Euler(-Math.PI / 2.0, 0, 0)}>
+          <geometryResource
+            resourceId="groundGeometry" />
+          <materialResource
+            resourceId="groundMaterial" />
+        </mesh>
         <mesh>
           <sphereGeometry
             radius={4000}
