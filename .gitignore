@@ -2,3 +2,5 @@
 .idea/dictionaries/
 .idea/uiDesigner.xml
 .idea/
+*.DS_Store
+assets/img/*

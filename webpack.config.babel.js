@@ -32,7 +32,7 @@ export default {
       './src/index.jsx',
     ],
     advanced: [
-      './src/examples/AdvancedExample/index.js',
+      './src/pages/AdvancedExample/index.js',
     ],
   },
   output: {

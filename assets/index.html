@@ -55,22 +55,22 @@
             background: #fafafa;
         }
 
-        #panel #content {
+        #panel #navContent {
             padding: 0px 20px;
         }
 
-        #panel #content .link {
+        #panel #navContent .link {
             color: #2194CE;
             display: block;
             text-decoration: none;
             cursor: pointer;
         }
 
-        #panel #content .selected {
+        #panel #navContent .selected {
             color: #ff0000;
         }
 
-        #panel #content .link:hover {
+        #panel #navContent .link:hover {
             text-decoration: underline;
         }
 
@@ -144,7 +144,7 @@
                 border-bottom: 1px solid #dedede;
             }
 
-            #content {
+            #navContent {
                 position: absolute;
                 left: 0;
                 top: 60px;
@@ -153,6 +153,10 @@
                 font-size: 17px;
                 line-height: 22px;
                 overflow: auto;
+            }
+
+            #content {
+              top: 0px;
             }
 
             #viewer {
@@ -173,6 +177,7 @@
             }
         }
     </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <div id="content"></div>
