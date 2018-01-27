@@ -42,6 +42,10 @@ export default {
   module: {
     loaders: [
       {
+        loader: ['style-loader', 'css-loader'],
+        test: /\.css$/,
+      },
+      {
         loader: 'json-loader',
         test: /\.json$/,
       },
@@ -53,6 +57,8 @@ export default {
         include: /react-three-renderer[\\/]src/,
         ...babelLoaderConfigShared,
       },
+      {
+      }
     ],
   },
   resolve: {

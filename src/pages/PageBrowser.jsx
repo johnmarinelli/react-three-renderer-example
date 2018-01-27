@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import PageViewer from './PageViewer';
 
 import Simple from './Simple';
+import Trane from './Trane';
 
 const pages = [
   {
@@ -11,6 +12,12 @@ const pages = [
     url: 'Simple/index',
     slug: 'webgl_simple',
   },
+  {
+    name: 'Trane',
+    component: Trane,
+    url: 'Trane/index',
+    slug: 'trane',
+  }
 ];
 
 const PageBrowser = ({ match }) => {

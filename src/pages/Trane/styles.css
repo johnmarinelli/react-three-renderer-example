@@ -1,0 +1,133 @@
+.grid {
+  display: grid;
+  padding: 10px;
+  height: 33%;
+  font-family: 'Oswald', sans-serif;
+  color: black;
+
+  grid-template-columns: repeat(10, 10%);
+  grid-template-rows: repeat(10, 10%);
+  grid-gap: 10px;
+}
+
+.grid div {
+  border: solid red thin;
+}
+
+.grid .cell1 {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  background-color: red;
+}
+
+.cell1 .circle {
+  width: 71%;
+  height: 79%;
+  margin: 8% auto;
+  background-color: #fff;
+  border-radius: 50%;
+}
+
+.grid .cell2 {
+  grid-column: 2;
+  grid-row: 1;
+  background-color: orange;
+}
+
+.grid .cell3 {
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.grid .cell4 {
+  grid-column: 4 / span 2;
+  grid-row: 1 / span 2;
+}
+
+.cell4 .rectangle {
+  height: 100%;
+  width: 100%;
+  background-color: orange;
+}
+
+.grid .cell5 {
+  grid-column: 6 / span 2;
+  grid-row: 1;
+}
+
+.cell5 .rectangle {
+  height: 100%;
+  width: 100%;
+  background-color: yellow;
+}
+
+.grid .cell6 {
+  grid-column: 6 / span 2;
+  grid-row: 2 / span 3;
+}
+
+.cell6 .rectangle {
+  height: 100%;
+  width: 100%;
+  background-color: orange;
+}
+
+.grid .cell7 {
+  grid-column: 2 / span 2;
+  grid-row: 5 / span 2;
+}
+
+.cell7 .rectangle {
+  height: 100%;
+  width: 100%;
+  background-color: purple;
+}
+
+.cell8 {
+  grid-column: 1;
+  grid-row: 5 / span 2;
+}
+
+.cell8 .text  {
+  font-weight: bold;
+}
+
+.cell9 {
+  grid-column: 2;
+  grid-row: 2 / span 3;
+}
+
+.cell10 {
+  grid-column: 3;
+  grid-row: 2 / span 3;
+}
+
+.cell11 {
+  grid-column: 4;
+  grid-row: 5 / span 2;
+}
+
+.cell12 {
+  grid-column: 5;
+  grid-row: 5 / span 2;
+}
+
+.cell13 {
+  grid-column: 6;
+  grid-row: 5 / span 3;
+}
+
+.cell14 {
+  grid-column: 7;
+  grid-row: 5 / span 3;
+}
+
+.cell15 {
+  grid-column: 1 / span 5;
+  grid-row: 7 / span 2;
+}
+
+.cell15 .text {
+  font-family: 'Niconne', cursive;
+  font-size: 2em;
+}
