@@ -2,15 +2,15 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import PageViewer from './PageViewer';
 
-import Simple from './Simple';
+import Albatross from './Albatross';
 import Trane from './Trane';
 
 const pages = [
   {
-    name: 'Simple',
-    component: Simple,
-    url: 'Simple/index',
-    slug: 'webgl_simple',
+    name: 'Albatross',
+    component: Albatross,
+    url: 'Albatross/index',
+    slug: 'albatross',
   },
   {
     name: 'Trane',
