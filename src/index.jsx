@@ -1,24 +1,11 @@
 /* eslint-disable no-undef */
-
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {
-  HashRouter as Router,
-  Route,
-} from 'react-router-dom';
-import Perf from 'react-addons-perf';
-import createHashHistory from 'history/createHashHistory';
+import App from './App';
 
-import PageBrowser from './pages/PageBrowser';
-
-const customHistory = createHashHistory();
-window.Perf = Perf;
+if (module.hot) module.hot.accept();
 
 ReactDOM.render(
-  <Router history={customHistory}>
-    <div>
-      <Route path="/:slug?" component={PageBrowser} />
-    </div>
-  </Router>,
+  <App />,
   document.getElementById('content'),
 );

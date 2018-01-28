@@ -2,12 +2,13 @@ import React from 'react';
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 
-import fragmentShader from 'raw-loader!./shaders/shader.frag';
-import vertexShader from 'raw-loader!./shaders/shader.vert';
+import fragmentShader from 'raw-loader!./shaders/sky_shader.frag';
+import vertexShader from 'raw-loader!./shaders/sky_shader.vert';
 import TrackballControls from '../../ref/trackball';
 import Stats from 'stats-js';
 
 import Sun from './Sun';
+import Starfield from './Starfield';
 
 class Albatross extends React.Component {
   static propTypes = {
@@ -63,7 +64,7 @@ class Albatross extends React.Component {
     };
 
     // model
-    this.mixers = [];
+    this.flamingoMeshAnimator = null;
     const loader = new THREE.JSONLoader();
 
     loader.load('models/flamingo.js', (geometry) => {
@@ -78,12 +79,14 @@ class Albatross extends React.Component {
       this.handles.flamingoMeshJsx = (
         <mesh
           ref={flamingoMesh => {
+            // this happens when a new page is clicked from sidebar
+            if (null === flamingoMesh || null !== this.flamingoMeshAnimator) return;
             flamingoMesh.updateMorphTargets();
             const mixer = new THREE.AnimationMixer(flamingoMesh);
             const clipAction  = mixer.clipAction(geometry.animations[0]);
-            clipAction.setDuration(1);
+            clipAction.setDuration(1.23);
             clipAction.play();
-            this.mixers.push(mixer);
+            this.flamingoMeshAnimator = mixer;
             this.flamingoMesh = flamingoMesh;
           }}
           scale={new THREE.Vector3(0.35, 0.35, 0.35)}
@@ -94,6 +97,7 @@ class Albatross extends React.Component {
             faceVertexUvs={faceVertexUvs}
             faces={faces}
             ref={flamingoGeometry => {
+              if (null === flamingoGeometry) return;
               flamingoGeometry.morphTargets = morphTargets.slice();
               this.handles.flamingoGeometry = flamingoGeometry;
             }}>
@@ -108,15 +112,17 @@ class Albatross extends React.Component {
     this._onAnimate = () => {
       const timeDelta = this.clock.getDelta();
 
-      // we will get this callback every frame
-      this.mixers.forEach(m => m.update(timeDelta));
-
       const { elapsedTime, globeRotation, sunRotation } = this.state;
+
       const newSunRotation = sunRotation.clone();
       newSunRotation.y += 0.0125;
 
       const newGlobeRotation = globeRotation.clone();
       newGlobeRotation.y += 0.01;
+
+      if (null !== this.flamingoMeshAnimator) {
+        this.flamingoMeshAnimator.update(timeDelta);
+      }
 
       if (null !== this.controls) {
         this.controls.update();
@@ -261,14 +267,13 @@ class Albatross extends React.Component {
             rotation={cameraRotation}
           />
           <hemisphereLight
-            intensity={0.1}
+            intensity={0.5}
             skyColor={this.skyColor}
             groundColor={this.groundColor}
             position={this.hemisphereLightPosition}
             ref={hemisphereLight => this.handles.hemisphereLight = hemisphereLight}
           />
           <Sun
-            color={this.directionalLightColor}
             position={sunPosition}
             rotation={sunRotation}
             setRef={directionalLight => {
@@ -277,6 +282,7 @@ class Albatross extends React.Component {
               }
             }}
           />
+          <Starfield />
           <mesh
             position={globePosition}
             rotation={globeRotation}
@@ -325,6 +331,7 @@ class Albatross extends React.Component {
   componentWillUnmount() {
     this.controls.removeEventListener('change', this.onTrackballChange);
     this.controls.dispose();
+    this.flamingoMeshAnimator = null;
     delete this.controls;
     delete this.stats;
   }
