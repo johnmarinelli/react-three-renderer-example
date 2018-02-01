@@ -16,8 +16,7 @@ class Sun extends React.Component {
     } = this.props;
 
     return (
-      <group
-        rotation={rotation}>
+      <group>
         <group
           position={position}
           rotation={rotation} >
@@ -25,22 +24,13 @@ class Sun extends React.Component {
             <sphereGeometry
               heightSegments={16}
               widthSegments={16}
-              radius={75}
+              radius={0.1875}
             />
             <shaderMaterial
               transparent
               blending={THREE.AdditiveBlending}
               vertexShader={vertexShader}
               fragmentShader={fragmentShader} />
-          </mesh>
-          <mesh>
-            <sphereGeometry
-              heightSegments={16}
-              widthSegments={16}
-              radius={50}
-            />
-            <meshPhongMaterial
-              color={0xFDB813} />
           </mesh>
           <directionalLight
             color={color}

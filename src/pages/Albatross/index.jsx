@@ -20,10 +20,10 @@ class Albatross extends React.Component {
     super(props, context);
 
     // camera
-    this.cameraFov = 30.0;
+    this.cameraFov = 10.0;
     this.aspectRatio = window.innerWidth / window.innerHeight;
     this.cameraNear = 1.0;
-    this.cameraFar = 5000.0;
+    this.cameraFar = 12.5;
 
     // fog/background
     this.clearColor = new THREE.Color().setHSL(0.6, 0.0, 1.0);
@@ -32,11 +32,20 @@ class Albatross extends React.Component {
     // lights
     this.skyColor = new THREE.Color().setHSL(0.6, 1.0, 1.0);
     this.groundColor = new THREE.Color().setHSL(0.095, 1.0, 0.75);
-    this.hemisphereLightPosition = new THREE.Vector3(0, 50, 0);
+    this.hemisphereLightPosition = new THREE.Vector3(0, 1.25, 0);
     this.directionalLightColor = new THREE.Color(0xffffff).setHSL(0.1, 1.0, 0.95);
 
     // globe
-    this.globeTexture = new THREE.TextureLoader().load('textures/patterns/earthmap1k.jpg');
+    this.globeTexture = new THREE.TextureLoader()
+      .load('textures/patterns/earthmap1k.jpg');
+    this.globeBump = new THREE.TextureLoader()
+      .load('textures/patterns/earthbump1k.jpg');
+    this.globeSpecular = new THREE.TextureLoader()
+      .load('textures/patterns/earthspec1k.jpg');
+    this.globeSpecularColor = new THREE.Color('gray');
+
+    this.cloudMap = new THREE.TextureLoader()
+      .load('textures/patterns/earthcloudmap.jpg');
 
     // refs
     this.handles = {
@@ -54,11 +63,12 @@ class Albatross extends React.Component {
     this.stats = null;
 
     this.state = {
-      globePosition: new THREE.Vector3(0, -210, 0),
+      globePosition: new THREE.Vector3(0, -0.525, 0),
       globeRotation: new THREE.Euler(),
-      sunPosition: new THREE.Vector3(-250.0, 0.0, 0.0),
+      cloudRotation: new THREE.Euler(),
+      sunPosition: new THREE.Vector3(-0.1875, 0.0, -0.875),
       sunRotation: new THREE.Euler(0, 0, 0),
-      cameraPosition: new THREE.Vector3(0, 0, 350),
+      cameraPosition: new THREE.Vector3(0, 0, 3.0),
       cameraRotation: new THREE.Euler(),
       elapsedTime: 0
     };
@@ -89,9 +99,9 @@ class Albatross extends React.Component {
             this.flamingoMeshAnimator = mixer;
             this.flamingoMesh = flamingoMesh;
           }}
-          scale={new THREE.Vector3(0.35, 0.35, 0.35)}
+          scale={new THREE.Vector3(0.000875, 0.000875, 0.000875)}
           rotation={new THREE.Euler(0, -1, 0)}
-          position={new THREE.Vector3(0, 15, 0)} >
+          position={new THREE.Vector3(0, 0.075, 0)} >
           <geometry
             vertices={vertices}
             faceVertexUvs={faceVertexUvs}
@@ -112,13 +122,18 @@ class Albatross extends React.Component {
     this._onAnimate = () => {
       const timeDelta = this.clock.getDelta();
 
-      const { elapsedTime, globeRotation, sunRotation } = this.state;
+      const { elapsedTime, globeRotation, cloudRotation, sunRotation } = this.state;
 
       const newSunRotation = sunRotation.clone();
       newSunRotation.y += 0.0125;
 
       const newGlobeRotation = globeRotation.clone();
       newGlobeRotation.y += 0.01;
+
+      const newCloudRotation = globeRotation.clone();
+      newCloudRotation.x -= 0.1;
+      newCloudRotation.y -= 0.1;
+      newCloudRotation.z -= 0.1;
 
       if (null !== this.flamingoMeshAnimator) {
         this.flamingoMeshAnimator.update(timeDelta);
@@ -135,7 +150,8 @@ class Albatross extends React.Component {
       this.setState({
         globeRotation: newGlobeRotation,
         elapsedTime: elapsedTime + timeDelta,
-        sunRotation: newSunRotation
+        sunRotation: newSunRotation,
+        cloudRotation: newCloudRotation
       });
     };
 
@@ -207,6 +223,7 @@ class Albatross extends React.Component {
       cameraRotation,
       globePosition,
       globeRotation,
+      cloudRotation,
       elapsedTime,
     } = this.state;
 
@@ -283,18 +300,37 @@ class Albatross extends React.Component {
             }}
           />
           <Starfield />
+          {/* Globe */}
           <mesh
             position={globePosition}
             rotation={globeRotation}
           >
             <sphereGeometry
-              radius={200}
+              radius={0.5}
               widthSegments={32}
               heightSegments={32}
             />
             <meshPhongMaterial
               map={this.globeTexture}
+              bumpMap={this.globeBump}
+              bumpScale={0.5}
+              specularMap={this.globeSpecular}
+              specular={this.globeSpecularColor}
             />
+          </mesh>
+          <mesh
+            position={globePosition}
+            rotation={cloudRotation} >
+            <sphereGeometry
+              widthSegments={32}
+              heightSegments={32}
+              radius={0.505} />
+            <meshPhongMaterial
+              map={this.cloudMap}
+              side={THREE.DoubleSide}
+              depthWrite={false}
+              transparent
+              opacity={0.2} />
           </mesh>
           <mesh
             ref={skyMesh => this.handles.skyMesh = skyMesh}
