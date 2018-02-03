@@ -2,8 +2,6 @@ import React from 'react';
 import React3 from 'react-three-renderer';
 import * as THREE from 'three';
 
-import fragmentShader from 'raw-loader!./shaders/sky_shader.frag';
-import vertexShader from 'raw-loader!./shaders/sky_shader.vert';
 import TrackballControls from '../../ref/trackball';
 import Stats from 'stats-js';
 
@@ -32,7 +30,7 @@ class Albatross extends React.Component {
     // lights
     this.skyColor = new THREE.Color().setHSL(0.6, 1.0, 1.0);
     this.groundColor = new THREE.Color().setHSL(0.095, 1.0, 0.75);
-    this.hemisphereLightPosition = new THREE.Vector3(0, 1.25, 0);
+    this.hemisphereLightPosition = new THREE.Vector3(0, 0.0, -0.5);
     this.directionalLightColor = new THREE.Color(0xffffff).setHSL(0.1, 1.0, 0.95);
 
     // globe
@@ -56,7 +54,6 @@ class Albatross extends React.Component {
       scene: null,
       flamingoMeshJsx: null,
       react3Ref: null,
-      skyMesh: null,
     };
 
     this.controls = null;
@@ -165,17 +162,6 @@ class Albatross extends React.Component {
       container,
       mainCamera
     } = this.handles;
-    // light helper
-    const hemisphereLightHelper =
-      new THREE.HemisphereLightHelper(hemisphereLight, 10);
-    scene.add(hemisphereLightHelper);
-
-    /*
-    const directionalLightHelper =
-      new THREE.DirectionalLightHelper(directionalLight, 10);
-    scene.add(directionalLightHelper);
-    */
-
     // initialize clock
     this.clock = new THREE.Clock();
 
@@ -230,14 +216,6 @@ class Albatross extends React.Component {
     const {
       flamingoMeshJsx
     } = this.handles;
-
-    const skyUniforms = {
-      topColor: {type: 'c', value: new THREE.Color(0x0077ff)},
-      bottomColor: {type: 'c', value: new THREE.Color(0x000000)},
-      offset: {type: 'f', value: 33},
-      exponent: {type: 'f', value: 0.6},
-      elapsedTime: {type: 'f', value: elapsedTime}
-    };
 
     return (
       <div ref={container => this.handles.container = container}>
@@ -331,21 +309,6 @@ class Albatross extends React.Component {
               depthWrite={false}
               transparent
               opacity={0.2} />
-          </mesh>
-          <mesh
-            ref={skyMesh => this.handles.skyMesh = skyMesh}
-          >
-            <sphereGeometry
-              radius={4000}
-              widthSegments={32}
-              heightSegments={15} />
-            <shaderMaterial
-              vertexShader={vertexShader}
-              fragmentShader={fragmentShader}
-              side={THREE.BackSide}
-              uniforms={skyUniforms}
-            >
-            </shaderMaterial>
           </mesh>
           {flamingoMeshJsx}
         </scene>
