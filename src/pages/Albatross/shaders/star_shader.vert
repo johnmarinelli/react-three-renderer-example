@@ -6,7 +6,7 @@ float rand(vec2 s) {
 
 void main() {
   vColor = color;
-  float size = rand(position.xy) * 20.0;
+  float size = rand(position.xy);
   vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
   gl_PointSize = size * (300.0 / -mvPosition.z);
   gl_Position = projectionMatrix * mvPosition;

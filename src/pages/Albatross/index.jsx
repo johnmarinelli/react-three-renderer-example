@@ -98,7 +98,7 @@ class Albatross extends React.Component {
           }}
           scale={new THREE.Vector3(0.000875, 0.000875, 0.000875)}
           rotation={new THREE.Euler(0, -1, 0)}
-          position={new THREE.Vector3(0, 0.075, 0)} >
+          position={new THREE.Vector3(0, 0.055, 0)} >
           <geometry
             vertices={vertices}
             faceVertexUvs={faceVertexUvs}

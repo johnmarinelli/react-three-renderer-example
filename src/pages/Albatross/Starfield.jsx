@@ -8,8 +8,8 @@ import vertexShader from 'raw-loader!./shaders/star_shader.vert';
 class Starfield extends React.Component {
   constructor() {
     super();
-    this.numStars = 1000;
-    const radius = 300;
+    this.numStars = 100;
+    const radius = 0.5;
 
     this.uniforms = {
       texture: {
